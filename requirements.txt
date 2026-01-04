@@ -1,0 +1,6 @@
+Pillow
+aiogram 3.22.0
+asyncio
+logging
+os
+datetime
