@@ -593,8 +593,8 @@ async def send_warn(message: types.Message, state: FSMContext):
 async def cmd_start(message: types.Message, state: FSMContext):
     uname = message.from_user.id
     print(message.chat.id)
-    await state.update_data(pict_path = r'C:\Users\ilya_\Desktop\nonogram\doggysbot\w')
-    #await state.update_data(pict_path = r'w')
+    #await state.update_data(pict_path = r'C:\Users\ilya_\Desktop\nonogram\doggysbot\w')
+    await state.update_data(pict_path = r'w')
     await state.update_data(cht_id = message.chat.id)
     await state.update_data(famcht_id = "-1001541827100") 
     await state.update_data(dates_week0 = []) # даты текущей недели.
@@ -743,8 +743,8 @@ async def help_command(message: Message):
 # Обработчик текстовых сообщений
 @dp.message(F.text =="🤖Освежить")
 async def echo_message(message: types.Message, state: FSMContext):
-    await state.update_data(pict_path = r'C:\Users\ilya_\Desktop\nonogram\doggysbot\w')
-    #await state.update_data(pict_path = r'w')
+    #await state.update_data(pict_path = r'C:\Users\ilya_\Desktop\nonogram\doggysbot\w')
+    await state.update_data(pict_path = r'w')
     await state.update_data(cht_id = message.chat.id)
     await state.update_data(famcht_id = "-1001541827100") 
     user_data = await state.get_data()
