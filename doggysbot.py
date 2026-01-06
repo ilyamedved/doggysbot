@@ -2,8 +2,8 @@ from PIL import Image, ImageDraw, ImageFont
 #from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import datetime 
 import asyncio
-import logging
-import os
+#import logging
+#import os
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command, CommandStart, StateFilter
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, Message, CallbackQuery, InputFile 
