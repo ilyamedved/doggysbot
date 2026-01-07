@@ -1,9 +1,9 @@
 from PIL import Image, ImageDraw, ImageFont
-#from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import datetime 
 import asyncio
-#import logging
-#import os
+import logging
+import os
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command, CommandStart, StateFilter
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, Message, CallbackQuery, InputFile 
@@ -582,15 +582,15 @@ async def send_alerts(message: types.Message, state: FSMContext):
 @dp.message(Command("send_warning"))
 async def send_warn(message: types.Message, state: FSMContext):
     user_data = await state.get_data()
-    #cht_id = 120443225 # this is my chat.
-    cht_id = user_data['famcht_id'] # this is our family chat.
+    cht_id = 120443225 # this is my chat.
     if user_data['user_id'] == 120443225: # it is Ilya.
+        cht_id = user_data['famcht_id'] # this is our family chat.
         #await bot.send_message(chat_id=cht_id, text="Раздел статистики готов. Пользуйстесь😊")
         #await bot.send_message(chat_id=cht_id, text="Я обновился!\nТеперь есть кнопка 'обновить' - можно нажимать её вместо команды 'start'. Пользуйстесь😊\nА ещё я буду уведомлять когда кто-нибудь освободит время прогулки.")
-        await bot.send_message(chat_id=cht_id, text="Я обновился!\nТеперь я могу попросить погулять с пёсом кого скажете! Пользуйтесь\nА ещё произошла масштабная миграция - я переехал в облако. Будет надёжнее и быстрее.\nА ещё появилась команда \help - описание основного функционала. Совершенству нет предела😊\nStay tuned!")
+        #await bot.send_message(chat_id=cht_id, text="Я обновился!\nТеперь я могу попросить погулять с пёсом кого скажете! Пользуйтесь\nА ещё произошла масштабная миграция - я переехал в облако. Будет надёжнее и быстрее.\nА ещё появилась команда \help - описание основного функционала. Совершенству нет предела😊\nStay tuned!")
     else:
         cht_id = user_data['cht_id'] # this is this chat.
-        await bot.send_message(chat_id=cht_id, text="Последняя обнова была такая⬇️ Все в курсе, не будем спамить.\nТеперь я могу попросить погулять с пёсом кого скажете! Пользуйтесь\nА ещё произошла масштабная миграция - я переехал в облако. Будет надёжнее и быстрее.\nА ещё появилась команда \help - описание основного функционала. Совершенству нет предела😊\nStay tuned!")
+        #await bot.send_message(chat_id=cht_id, text="Последняя обнова была такая⬇️ Все в курсе, не будем спамить.\nТеперь я могу попросить погулять с пёсом кого скажете! Пользуйтесь\nА ещё произошла масштабная миграция - я переехал в облако. Будет надёжнее и быстрее.\nА ещё появилась команда \help - описание основного функционала. Совершенству нет предела😊\nStay tuned!")
     #print("send alerts")
 
 # Обработчик команды /start ----------------------------------------------------------------------------------------------------------------
@@ -598,7 +598,7 @@ async def send_warn(message: types.Message, state: FSMContext):
 async def cmd_start(message: types.Message, state: FSMContext):
     uname = message.from_user.id
     print(message.chat.id)
-    #await state.update_data(pict_path = r'C:\Users\ilya_\Desktop\nonogram\doggysbot\w')
+    #await state.update_data(pict_path = r'C:\Users\ilya_\Desktop\doggysbot\w')
     await state.update_data(pict_path = r'w')
     await state.update_data(cht_id = message.chat.id)
     await state.update_data(famcht_id = "-1001541827100") 
@@ -610,7 +610,7 @@ async def cmd_start(message: types.Message, state: FSMContext):
     await state.update_data(even_week1 = []) # вечера следующей недели - кто гуляет.
     await state.update_data(days_week0 = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"]) # дни текущей недели.
     await state.update_data(days_week1 = ["пн", "вт", "ср", "чт", "пт", "сб", "вс"]) # дни следующей недели.
-    
+    user_data = await state.get_data()
     dts = [] 
     mr = []
     ev = []
@@ -618,8 +618,9 @@ async def cmd_start(message: types.Message, state: FSMContext):
     wd = td.weekday() + 1 # день недели, пн = 1.
     monday = td - datetime.timedelta(days = wd - 1) # date of this week's monday.
     user_data = await state.get_data()
-     # Let's fill the calendar from the file.
+     # Let's fill the calendar from the file. 
     fname = user_data['pict_path']+"calendar.txt"
+    print(fname)
     fin = open(fname,"r", encoding="ANSI")
     for k in range(7):
         fl = True
@@ -748,7 +749,7 @@ async def help_command(message: Message):
 # Обработчик текстовых сообщений
 @dp.message(F.text =="🤖Освежить")
 async def echo_message(message: types.Message, state: FSMContext):
-    #await state.update_data(pict_path = r'C:\Users\ilya_\Desktop\nonogram\doggysbot\w')
+    #await state.update_data(pict_path = r'C:\Users\ilya_\Desktop\doggysbot\w')
     await state.update_data(pict_path = r'w')
     await state.update_data(cht_id = message.chat.id)
     await state.update_data(famcht_id = "-1001541827100") 
