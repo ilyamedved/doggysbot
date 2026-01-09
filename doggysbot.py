@@ -4,7 +4,7 @@ import datetime
 import asyncio
 import logging
 import os
-from aiogram import Bot, Dispatcher, types, F
+from aiogram import Bot, Dispatcher, types, MagicFilter
 from aiogram.filters import Command, CommandStart, StateFilter
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, Message, CallbackQuery, InputFile 
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
@@ -13,6 +13,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.state import default_state, State, StatesGroup
 
 BOT_TOKEN = "399139355:AAGHxC5TD6N117PY4P_UFjtsb7G41CXCXOI"
+F = MagicFilter()
 class play(StatesGroup):
     choisedate = State()
     choisetime = State()
