@@ -583,11 +583,12 @@ async def send_alerts(message: types.Message, state: FSMContext):
 async def send_warn(message: types.Message, state: FSMContext):
     user_data = await state.get_data()
     cht_id = 120443225 # this is my chat.
-    if user_data['user_id'] == 120443225: # it is Ilya.
+    if message.from_user.id == 120443225: # this is Ilya.
         cht_id = user_data['famcht_id'] # this is our family chat.
         #await bot.send_message(chat_id=cht_id, text="Раздел статистики готов. Пользуйстесь😊")
         #await bot.send_message(chat_id=cht_id, text="Я обновился!\nТеперь есть кнопка 'обновить' - можно нажимать её вместо команды 'start'. Пользуйстесь😊\nА ещё я буду уведомлять когда кто-нибудь освободит время прогулки.")
-        await bot.send_message(chat_id=cht_id, text="Я обновился!\nТеперь я могу попросить погулять с пёсом кого скажете! Пользуйтесь\nА ещё произошла масштабная миграция - я переехал в облако. Будет надёжнее и быстрее.\nА ещё появилась команда \help - описание основного функционала. Совершенству нет предела😊\nStay tuned!")
+        #print("gg")
+        #await bot.send_message(chat_id=cht_id, text="Я обновился!\nТеперь я могу попросить погулять с пёсом кого скажете! Пользуйтесь\nА ещё произошла масштабная миграция - я переехал в облако. Будет надёжнее и быстрее.\nА ещё появилась команда \help - описание основного функционала. Совершенству нет предела😊\nStay tuned!")
     else:
         cht_id = user_data['cht_id'] # this is this chat.
         await bot.send_message(chat_id=cht_id, text="Последняя обнова была такая⬇️ Все в курсе, не будем спамить.\nТеперь я могу попросить погулять с пёсом кого скажете! Пользуйтесь\nА ещё произошла масштабная миграция - я переехал в облако. Будет надёжнее и быстрее.\nА ещё появилась команда \help - описание основного функционала. Совершенству нет предела😊\nStay tuned!")
