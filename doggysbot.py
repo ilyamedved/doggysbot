@@ -88,7 +88,7 @@ def Draw_timetable(file_path, dts, mr, ev, weeknum): #draws jpeg with timetable 
     new_img.save(fname)
 
 def get_stats(fname):
-    fin = open(fname,"r", encoding="ANSI")
+    fin = open(fname,"r", encoding="utf-8")
     stat = [[0,0,0,0],[0,0,0,0]]
     td = datetime.date.today()
     #stat[1] = [0,0,0,0] #number of evening doggy walks. СП, ММ, КА, КН.
@@ -121,8 +121,8 @@ def get_stats(fname):
 def put_into(fname,dt,morning,person):
     #fname = имя файла где хранится,dt = дата что записать, morning =0 <=> утро, person = кто гуляет.
     fnameout = fname.rstrip(".txt") + "1.txt"
-    fout = open(fnameout,"w", encoding="ANSI")
-    fin = open(fname,"r", encoding="ANSI")
+    fout = open(fnameout,"w", encoding="utf-8")
+    fin = open(fname,"r", encoding="utf-8")
     strng = fin.readline()
     fl = False # True <=> date is found un the file.
     cerdt = datetime.date(int(str(dt).split('-')[0]),int(str(dt).split('-')[1]),int(str(dt).split('-')[2])) # это certain date - точно дата, независимо от того, подали str or date.
@@ -253,7 +253,7 @@ async def morning_pressed(callback: types.CallbackQuery, state: FSMContext):
                 await state.set_state(default_state)
                 await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
                 #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"calendar.txt",cdt,0,user_data['sname'])
+                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,0,user_data['sname'])
                 #Let's update the timetable loaded.
                 ev = user_data['morn_week0']
                 ev[user_data['wdn']-1] = user_data['sname']
@@ -287,7 +287,7 @@ async def morning_pressed(callback: types.CallbackQuery, state: FSMContext):
                 await state.set_state(default_state)
                 await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
                 #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"calendar.txt",cdt,1,user_data['sname'])
+                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,1,user_data['sname'])
                 #Let's update the timetable loaded.
                 ev = user_data['even_week0']
                 ev[user_data['wdn']-1] = user_data['sname']
@@ -321,7 +321,7 @@ async def morning_pressed(callback: types.CallbackQuery, state: FSMContext):
                 await state.set_state(default_state)
                 await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
                 #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"calendar.txt",cdt,0,user_data['sname'])
+                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,0,user_data['sname'])
                 #Let's update the timetable loaded.
                 ev = user_data['morn_week1']
                 ev[user_data['wdn']-1] = user_data['sname']
@@ -355,7 +355,7 @@ async def morning_pressed(callback: types.CallbackQuery, state: FSMContext):
                 await state.set_state(default_state)
                 await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
                 #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"calendar.txt",cdt,1,user_data['sname'])
+                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,1,user_data['sname'])
                 #Let's update the timetable loaded.
                 ev = user_data['even_week1']
                 ev[user_data['wdn']-1] = user_data['sname']
@@ -400,7 +400,7 @@ async def morning_pressed(callback: types.CallbackQuery, state: FSMContext):
                 await state.set_state(default_state)
                 await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
                 #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"calendar.txt",cdt,0,user_data['sname'])
+                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,0,user_data['sname'])
                 #Let's update the timetable loaded.
                 ev = user_data['morn_week0']
                 ev[user_data['wdn']-1] = user_data['sname']
@@ -440,7 +440,7 @@ async def morning_pressed(callback: types.CallbackQuery, state: FSMContext):
                 
                 await state.set_state(default_state)
                 await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))  #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"calendar.txt",cdt,1,user_data['sname'])
+                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,1,user_data['sname'])
                 await callback.answer() # чтобы подтвердить ответ, техническая штука
             else:
                 #print("smbd has already taken this timeslot")
@@ -473,7 +473,7 @@ async def morning_pressed(callback: types.CallbackQuery, state: FSMContext):
                 await state.set_state(default_state)
                 await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
                 #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"calendar.txt",cdt,0,user_data['sname'])
+                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,0,user_data['sname'])
                 #Let's update the timetable loaded.
                 ev = user_data['morn_week1']
                 ev[user_data['wdn']-1] = user_data['sname']
@@ -513,7 +513,7 @@ async def morning_pressed(callback: types.CallbackQuery, state: FSMContext):
                 
                 await state.set_state(default_state)
                 await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))  #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"calendar.txt",cdt,1,user_data['sname'])
+                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,1,user_data['sname'])
                 await callback.answer() # чтобы подтвердить ответ, техническая штука
             else:
                 #print("smbd has already taken this timeslot")
@@ -619,9 +619,11 @@ async def cmd_start(message: types.Message, state: FSMContext):
     monday = td - datetime.timedelta(days = wd - 1) # date of this week's monday.
     user_data = await state.get_data()
      # Let's fill the calendar from the file. 
-    fname = user_data['pict_path']+"calendar.txt"
+    #fname = user_data['pict_path']+"calendar.txt"
+    fname = user_data['pict_path']+"utf8calendar.txt"
     print(fname)
-    fin = open(fname,"r", encoding="ANSI")
+    #fin = open(fname,"r", encoding="ANSI")
+    fin = open(fname,"r", encoding="utf-8")
     for k in range(7):
         fl = True
         cdt = monday + datetime.timedelta(days = k) # current date to look for in the file.
@@ -677,7 +679,7 @@ async def cmd_start(message: types.Message, state: FSMContext):
         mr.append("ПУ")
         ev.append("ПУ")
     print(dts1)
-    fin = open(fname,"r", encoding="ANSI")
+    fin = open(fname,"r", encoding="utf-8")
     fl = True
     while fl:
         #let's find dts[k] in the file.
@@ -771,8 +773,8 @@ async def echo_message(message: types.Message, state: FSMContext):
     monday = td - datetime.timedelta(days = wd - 1) # date of this week's monday.
     user_data = await state.get_data()
      # Let's fill the calendar from the file.
-    fname = user_data['pict_path']+"calendar.txt"
-    fin = open(fname,"r", encoding="ANSI")
+    fname = user_data['pict_path']+"utf8calendar.txt"
+    fin = open(fname,"r", encoding="utf-8")
     for k in range(7):
         fl = True
         cdt = monday + datetime.timedelta(days = k) # current date to look for in the file.
@@ -827,7 +829,7 @@ async def echo_message(message: types.Message, state: FSMContext):
         mr.append("ПУ")
         ev.append("ПУ")
     print(dts1)
-    fin = open(fname,"r", encoding="ANSI")
+    fin = open(fname,"r", encoding="utf-8")
     fl = True
     while fl:
         #let's find dts[k] in the file.
@@ -908,7 +910,7 @@ async def echo_message(message: types.Message, state: FSMContext):
 @dp.message(F.text =="📊Статистика")
 async def echo_message(message: types.Message, state: FSMContext):
     user_data = await state.get_data()
-    fname = user_data['pict_path'] +"calendar.txt"
+    fname = user_data['pict_path'] +"utf8calendar.txt"
     stat = [[0,0,0,0],[0,0,0,0]] #number of doggy walks. СП, ММ, КА, КН.
     #stat[1] = [0,0,0,0] #number of evening doggy walks. СП, ММ, КА, КН.
     #print("Let's dive into get_stat")
@@ -1062,7 +1064,7 @@ async def echo_message(message: types.Message, state: FSMContext):
         await state.set_state(default_state)
         await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
         #---Let's update file wcalendar.txt
-        put_into(user_data['pict_path']+"calendar.txt",user_data['dates_week'+wn][wdn-1],0,"ПУ") #print(fname,dt,morning,person)
+        put_into(user_data['pict_path']+"utf8calendar.txt",user_data['dates_week'+wn][wdn-1],0,"ПУ") #print(fname,dt,morning,person)
         #Let's update the timetable loaded.
         if wn == '0':
             mrw0[wdn-1] = "ПУ"
@@ -1089,7 +1091,7 @@ async def echo_message(message: types.Message, state: FSMContext):
         await state.set_state(default_state)
         await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
         #---Let's update file wcalendar.txt
-        put_into(user_data['pict_path']+"calendar.txt",user_data['dates_week0'][wdn-1],1,"ПУ")
+        put_into(user_data['pict_path']+"utf8calendar.txt",user_data['dates_week0'][wdn-1],1,"ПУ")
         #Let's update the timetable loaded.
         mrw0[wdn-1] = "ПУ"
         await state.update_data(morn_week0 = mrw0)
@@ -1111,7 +1113,7 @@ async def echo_message(message: types.Message, state: FSMContext):
         await state.set_state(default_state)
         await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
         #---Let's update file wcalendar.txt
-        put_into(user_data['pict_path']+"calendar.txt",user_data['dates_week0'][wdn-1],0,"ПУ")
+        put_into(user_data['pict_path']+"utf8calendar.txt",user_data['dates_week0'][wdn-1],0,"ПУ")
         #Let's update the timetable loaded.
         mrw0[wdn-1] = "ПУ"
         await state.update_data(morn_week0 = mrw0)
@@ -1133,7 +1135,7 @@ async def echo_message(message: types.Message, state: FSMContext):
         await state.set_state(default_state)
         await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
         #---Let's update file wcalendar.txt
-        put_into(user_data['pict_path']+"calendar.txt",user_data['dates_week0'][wdn-1],1,"ПУ")
+        put_into(user_data['pict_path']+"utf8calendar.txt",user_data['dates_week0'][wdn-1],1,"ПУ")
         #Let's update the timetable loaded.
         mrw0[wdn-1] = "ПУ"
         await state.update_data(morn_week0 = mrw0)
@@ -1155,7 +1157,7 @@ async def echo_message(message: types.Message, state: FSMContext):
         await state.set_state(default_state)
         await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
         #---Let's update file wcalendar.txt
-        put_into(user_data['pict_path']+"calendar.txt",user_data['dates_week0'][wdn-1],0,"ПУ")
+        put_into(user_data['pict_path']+"utf8calendar.txt",user_data['dates_week0'][wdn-1],0,"ПУ")
         print("wdn=",wdn)
         #Let's update the timetable loaded.
         mrw0[wdn-1] = "ПУ"
@@ -1178,7 +1180,7 @@ async def echo_message(message: types.Message, state: FSMContext):
         await state.set_state(default_state)
         await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
         #---Let's update file wcalendar.txt
-        put_into(user_data['pict_path']+"calendar.txt",user_data['dates_week0'][wdn-1],1,"ПУ")
+        put_into(user_data['pict_path']+"utf8calendar.txt",user_data['dates_week0'][wdn-1],1,"ПУ")
         #Let's update the timetable loaded.
         mrw0[wdn-1] = "ПУ"
         await state.update_data(morn_week0 = mrw0)
@@ -1204,7 +1206,7 @@ async def echo_message(message: types.Message, state: FSMContext):
         await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
         print("pict sent")
         #---Let's update file wcalendar.txt
-        put_into(user_data['pict_path']+"calendar.txt",user_data['dates_week0'][wdn-1],0,"ПУ")
+        put_into(user_data['pict_path']+"utf8calendar.txt",user_data['dates_week0'][wdn-1],0,"ПУ")
         #Let's update the timetable loaded.
         #print("file on the disk updated")
         mrw0[wdn-1] = "ПУ"
@@ -1229,7 +1231,7 @@ async def echo_message(message: types.Message, state: FSMContext):
         await state.set_state(default_state)
         await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
         #---Let's update file wcalendar.txt
-        put_into(user_data['pict_path']+"calendar.txt",user_data['dates_week0'][wdn-1],1,"ПУ")
+        put_into(user_data['pict_path']+"utf8calendar.txt",user_data['dates_week0'][wdn-1],1,"ПУ")
         #Let's update the timetable loaded.
         mrw0[wdn-1] = "ПУ"
         await state.update_data(morn_week0 = mrw0)
@@ -1251,7 +1253,7 @@ async def echo_message(message: types.Message, state: FSMContext):
         await state.set_state(default_state)
         await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
         #---Let's update file wcalendar.txt
-        put_into(user_data['pict_path']+"calendar.txt",user_data['dates_week0'][wdn-1],0,"ПУ")
+        put_into(user_data['pict_path']+"utf8calendar.txt",user_data['dates_week0'][wdn-1],0,"ПУ")
         #Let's update the timetable loaded.
         mrw0[wdn-1] = "ПУ"
         await state.update_data(morn_week0 = mrw0)
@@ -1273,7 +1275,7 @@ async def echo_message(message: types.Message, state: FSMContext):
         await state.set_state(default_state)
         await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
         #---Let's update file wcalendar.txt
-        put_into(user_data['pict_path']+"calendar.txt",user_data['dates_week0'][wdn-1],1,"ПУ")
+        put_into(user_data['pict_path']+"utf8calendar.txt",user_data['dates_week0'][wdn-1],1,"ПУ")
         #Let's update the timetable loaded.
         mrw0[wdn-1] = "ПУ"
         await state.update_data(morn_week0 = mrw0)
@@ -1295,7 +1297,7 @@ async def echo_message(message: types.Message, state: FSMContext):
         await state.set_state(default_state)
         await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
         #---Let's update file wcalendar.txt
-        put_into(user_data['pict_path']+"calendar.txt",user_data['dates_week0'][wdn-1],0,"ПУ")
+        put_into(user_data['pict_path']+"utf8calendar.txt",user_data['dates_week0'][wdn-1],0,"ПУ")
         #Let's update the timetable loaded.
         mrw0[wdn-1] = "ПУ"
         await state.update_data(morn_week0 = mrw0)
@@ -1317,7 +1319,7 @@ async def echo_message(message: types.Message, state: FSMContext):
         await state.set_state(default_state)
         await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
         #---Let's update file wcalendar.txt
-        put_into(user_data['pict_path']+"calendar.txt",user_data['dates_week0'][wdn-1],1,"ПУ")
+        put_into(user_data['pict_path']+"utf8calendar.txt",user_data['dates_week0'][wdn-1],1,"ПУ")
         #Let's update the timetable loaded.
         mrw0[wdn-1] = "ПУ"
         await state.update_data(morn_week0 = mrw0)
@@ -1341,7 +1343,7 @@ async def echo_message(message: types.Message, state: FSMContext):
         await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
         #---Let's update file wcalendar.txt
         print(user_data['dates_week0'][wdn-1])
-        put_into(user_data['pict_path']+"calendar.txt",user_data['dates_week0'][wdn-1],0,"ПУ")
+        put_into(user_data['pict_path']+"utf8calendar.txt",user_data['dates_week0'][wdn-1],0,"ПУ")
         #Let's update the timetable loaded.
         mrw0[wdn-1] = "ПУ"
         await state.update_data(morn_week0 = mrw0)
@@ -1363,7 +1365,7 @@ async def echo_message(message: types.Message, state: FSMContext):
         await state.set_state(default_state)
         await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
         #---Let's update file wcalendar.txt
-        put_into(user_data['pict_path']+"calendar.txt",user_data['dates_week0'][wdn-1],1,"ПУ")
+        put_into(user_data['pict_path']+"utf8calendar.txt",user_data['dates_week0'][wdn-1],1,"ПУ")
         #Let's update the timetable loaded.
         evw0[wdn-1] = "ПУ"
         await state.update_data(even_week0 = evw0)
