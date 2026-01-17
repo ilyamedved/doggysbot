@@ -4,6 +4,7 @@ import datetime
 import asyncio
 import logging
 import os
+from dotenv import load_dotenv
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import Command, CommandStart, StateFilter
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, Message, CallbackQuery, InputFile 
@@ -12,7 +13,12 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.fsm.state import default_state, State, StatesGroup
 
-BOT_TOKEN = "399139355:AAGHxC5TD6N117PY4P_UFjtsb7G41CXCXOI"
+
+dotenv_path = os.path.join(os.path.dirname(__file__), 'doggysbot.env')
+#print("this is dotenv_path=",dotenv_path)
+load_dotenv(dotenv_path)
+BT = os.getenv('BOT_TOKEN')
+
 class play(StatesGroup):
     choisedate = State()
     choisetime = State()
@@ -159,7 +165,7 @@ def put_into(fname,dt,morning,person):
     os.rename(fnameout, fname)
 
 # -------------------------------------------- Инициализация -----------------------------------
-bot = Bot(token=BOT_TOKEN)
+bot = Bot(token=BT)
 dp = Dispatcher(storage=storage)
 # Создание клавиатуры
 def get_keyboard():
