@@ -101,25 +101,26 @@ def get_stats(fname):
     strng = fin.readline()
     while strng !="": #strng ="" <=> EOF is reached.
         print(strng)
-        spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
-        print(datetime.date(int(str(spl[0].split('-')[0])),int(str(spl[0].split('-')[1])),int(str(spl[0].split('-')[2]))))
-        if datetime.date(int(str(spl[0].split('-')[0])),int(str(spl[0].split('-')[1])),int(str(spl[0].split('-')[2]))) <= td:
-            if spl[1] == 'СП':
-                stat[0][0] += 1
-            if spl[1] == 'ММ':
-                stat[0][1] += 1
-            if spl[1] == 'КА':
-                stat[0][2] += 1
-            if spl[1] == 'КН':
-                stat[0][3] += 1
-            if spl[2] == 'СП':
-                stat[1][0] += 1
-            if spl[2] == 'ММ':
-                stat[1][1] += 1
-            if spl[2] == 'КА':
-                stat[1][2] += 1
-            if spl[2] == 'КН':
-                stat[1][3] += 1
+        if len(strng) > 10:
+            spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
+            print(datetime.date(int(str(spl[0].split('-')[0])),int(str(spl[0].split('-')[1])),int(str(spl[0].split('-')[2]))))
+            if datetime.date(int(str(spl[0].split('-')[0])),int(str(spl[0].split('-')[1])),int(str(spl[0].split('-')[2]))) <= td:
+                if spl[1] == 'СП':
+                    stat[0][0] += 1
+                if spl[1] == 'ММ':
+                    stat[0][1] += 1
+                if spl[1] == 'КА':
+                    stat[0][2] += 1
+                if spl[1] == 'КН':
+                    stat[0][3] += 1
+                if spl[2] == 'СП':
+                    stat[1][0] += 1
+                if spl[2] == 'ММ':
+                    stat[1][1] += 1
+                if spl[2] == 'КА':
+                    stat[1][2] += 1
+                if spl[2] == 'КН':
+                    stat[1][3] += 1
         strng = fin.readline()
     fin.close()
     return stat
@@ -132,21 +133,22 @@ def put_into(fname,dt,morning,person):
     strng = fin.readline()
     fl = False # True <=> date is found un the file.
     cerdt = datetime.date(int(str(dt).split('-')[0]),int(str(dt).split('-')[1]),int(str(dt).split('-')[2])) # это certain date - точно дата, независимо от того, подали str or date.
-    print(cerdt)
+    print("cerdt=",cerdt)
     while strng !="": #strng ="" <=> EOF is reached.
-        spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
-        #print(spl[0].split('-')[0])
-        if datetime.date(int(spl[0].split('-')[0]),int(spl[0].split('-')[1]),int(spl[0].split('-')[2])) == cerdt:   
-            print("this is the line we searsching for")
-            strng = spl[0] + " "
-            if morning == 0:
-                strng = strng + person.upper() + " " + spl[2] + "\n"
-            else:
-                #print("evening")
-                strng = strng + spl[1] + " " + person.upper()+ "\n"
-            fl = True
-            print(strng)
-        fout.write(strng)
+        if len(strng) > 10: # otherwise the line is garbage.
+            spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
+            #print(spl[0].split('-')[0])
+            if datetime.date(int(spl[0].split('-')[0]),int(spl[0].split('-')[1]),int(spl[0].split('-')[2])) == cerdt:   
+                print("this is the line we searsching for")
+                strng = spl[0] + " "
+                if morning == 0:
+                    strng = strng + person.upper() + " " + spl[2] + "\n"
+                else:
+                    #print("evening")
+                    strng = strng + spl[1] + " " + person.upper()+ "\n"
+                fl = True
+                print(strng)
+            fout.write(strng)
         strng = fin.readline()
     print("flag =",fl)
     if not fl:
@@ -158,6 +160,8 @@ def put_into(fname,dt,morning,person):
         else:
             strng = strng + "ПУ " + person.upper()  
         fout.write('\n' + strng)
+        print("strng=",strng)
+        #fout.write(strng)
     fin.close()
     fout.close()
     # Let's delete previous file and rename new.
