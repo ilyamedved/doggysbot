@@ -28,6 +28,150 @@ class play(StatesGroup):
     mode = State()
 # Инициализируем хранилище (создаем экземпляр класса MemoryStorage)
 storage = MemoryStorage()
+def isdate(txt): # True <=> txt is date.
+    str = txt.lower().strip()
+    res = False
+    if len(str) == 5:
+        # asuming DD.MM format or any other separator.
+        day = str[:2]
+        mon = str[3:5]
+        if day.isdigit() and mon.isdigit():
+            d = int(day)
+            m = int(mon)
+            res = False
+            if (m==1 or m==3 or m==5 or m==7 or m==8 or m==10 or m==12) and d>0 and d<32:
+                res = True
+            if (m==4 or m==6 or m==9 or m==11) and d>0 and d<31:
+                res = True
+            if m==2 and d>0 and d<29:         
+                res = True
+            if m==2 and d==29 and (datetime.date.today().year % 4) == 0:
+                res = True
+        else:
+            # it is not date anyhow
+            res = False
+    if len(str) == 8:
+        # asuming DD.MM.YY format or any other separator.
+        day = str[:2]
+        mon = str[3:5]
+        yr = str[6:8]
+        if day.isdigit() and mon.isdigit() and yr.isdigit():
+            d = int(day)
+            m = int(mon)
+            y = int(yr)
+            res = False
+            if (m==1 or m==3 or m==5 or m==7 or m==8 or m==10 or m==12) and d>0 and d<32:
+                res = True
+            if (m==4 or m==6 or m==9 or m==11) and d>0 and d<31:
+                res = True
+            if m==2 and d>0 and d<29:         
+                res = True
+            if m==2 and d==29 and (y % 4) == 0:
+                res = True
+        else:
+            # it is not date anyhow
+            res = False
+    if len(str) == 10:
+        # asuming DD.MM.YYYY format or any other separator.
+        day = str[:2]
+        mon = str[3:5]
+        yr = str[6:10]
+        if day.isdigit() and mon.isdigit() and yr.isdigit():
+            d = int(day)
+            m = int(mon)
+            y = int(yr)
+            res = False
+            if (m==1 or m==3 or m==5 or m==7 or m==8 or m==10 or m==12) and d>0 and d<32:
+                res = True
+            if (m==4 or m==6 or m==9 or m==11) and d>0 and d<31:
+                res = True
+            if m==2 and d>0 and d<29:         
+                res = True
+            if m==2 and d==29 and (y % 4) == 0:
+                res = True
+        else:
+            # it is not date anyhow
+            res = False
+    return res
+def getdate(txt): # asuming txt is date, returns the date.
+    str = txt.lower().strip()
+    if len(str) == 5:
+        # asuming DD.MM format or any other separator.
+        day = str[:2]
+        mon = str[3:5]
+        if day.isdigit() and mon.isdigit():
+            d = int(day)
+            m = int(mon)
+            res = False
+            if (m==1 or m==3 or m==5 or m==7 or m==8 or m==10 or m==12) and d>0 and d<32:
+                res = True         
+            if (m==4 or m==6 or m==9 or m==11) and d>0 and d<31:
+                res = True
+            if m==2 and d>0 and d<29:         
+                res = True
+            if m==2 and d==29 and (datetime.date.today().year % 4) == 0:
+                res = True
+            if res:
+                dt = datetime.date(datetime.date.today().year,m,d)
+        else:
+            # it is not date anyhow
+            res = False
+    if len(str) == 8:
+        # asuming DD.MM.YY format or any other separator.
+        day = str[:2]
+        mon = str[3:5]
+        yr = str[6:8]
+        if day.isdigit() and mon.isdigit() and yr.isdigit():
+            d = int(day)
+            m = int(mon)
+            y = int(yr)
+            res = False
+            if (m==1 or m==3 or m==5 or m==7 or m==8 or m==10 or m==12) and d>0 and d<32:
+                res = True
+            if (m==4 or m==6 or m==9 or m==11) and d>0 and d<31:
+                res = True
+            if m==2 and d>0 and d<29:         
+                res = True
+            if m==2 and d==29 and (y % 4) == 0:
+                res = True
+            if res:
+                dt = datetime.date(2000+y,m,d)
+        else:
+            # it is not date anyhow
+            res = False
+    if len(str) == 10:
+        # asuming DD.MM.YYYY format or any other separator.
+        day = str[:2]
+        mon = str[3:5]
+        yr = str[6:10]
+        if day.isdigit() and mon.isdigit() and yr.isdigit():
+            d = int(day)
+            m = int(mon)
+            y = int(yr)
+            res = False
+            if (m==1 or m==3 or m==5 or m==7 or m==8 or m==10 or m==12) and d>0 and d<32:
+                res = True
+            if (m==4 or m==6 or m==9 or m==11) and d>0 and d<31:
+                res = True
+            if m==2 and d>0 and d<29:         
+                res = True
+            if m==2 and d==29 and (y % 4) == 0:
+                res = True
+            if res:
+                dt = datetime.date(y,m,d)
+        else:
+            # it is not date anyhow
+            res = False
+        if not res:
+            dt = datetime.date(1980,10,26)
+    return dt
+def whatweek(cdt):
+    # returns number of week, to which 'cdt' belongs. 0 - this week.
+    td = datetime.date.today()
+    md = td - datetime.timedelta(days = td.weekday()) #md = date of the monday this week.
+    n = (cdt - md).days
+    return n//7
+ 
 
 def Draw_timetable(file_path, dts, mr, ev, weeknum): #draws jpeg with timetable on the week number = weeknum.
     new_img = Image.open(file_path +"eek_matrix.jpg")
@@ -85,14 +229,73 @@ def Draw_timetable(file_path, dts, mr, ev, weeknum): #draws jpeg with timetable 
             pencil.text((40+3+i*32, 18+32*1),ev[i]  , font=font, fill='black')
     # Let's draw dates.
     font = ImageFont.truetype("arial.ttf", 9)
-
-    for i in range(7):
-        dt = dts[i].split("-")[2] + "." + dts[i].split("-")[1]
-        pencil.rectangle([40+i*32, 1, 65+i*32, 12],fill = (255, 255, 255, 0), outline = 'white', width = 0)
-        pencil.text((40+3+i*32, 1),dt, font=font, fill=(80, 80, 80, 0))
-    #os.remove(fname)
+    print("dts=",dts)
+    if dts[0].__class__.__name__ == "str":
+        for i in range(7):
+            dt = dts[i].split("-")[2]+"."+dts[i].split("-")[1]
+            pencil.rectangle([40+i*32, 1, 65+i*32, 12],fill = (255, 255, 255, 0), outline = 'white', width = 0)
+            pencil.text((40+3+i*32, 1),dt, font=font, fill=(80, 80, 80, 0))
+    if dts[0].__class__.__name__ == "date":
+        for i in range(7):
+            dt = str(dts[i].day)
+            if len(dt) == 1:
+                dt = "0"+dt+"."
+            if len(str(dts[i].month))==1:
+                dt = dt+"0"
+            dt = dt+str(dts[i].month)
+            #print(dt)
+            pencil.rectangle([40+i*32, 1, 65+i*32, 12],fill = (255, 255, 255, 0), outline = 'white', width = 0)
+            pencil.text((40+3+i*32, 1),dt, font=font, fill=(80, 80, 80, 0))
+        #os.remove(fname)
     new_img.save(fname)
 
+def Draw_timetableFF(file_path, fname, weeknum): #draws jpeg with timetable on the week number = weeknum.
+    # let's fill mr, ev and dts and then call the sub.
+    td = datetime.date.today()
+    md = td - datetime.timedelta(days = td.weekday()) #md = date of the monday this week.
+    md = md + datetime.timedelta(days = 7*weeknum) # md = date of the monday needed week.
+    dts = [md]
+    mr = ["ПУ"]
+    ev = ["ПУ"]
+    for i in range(6):
+        dts.append(md + datetime.timedelta(days = i+1))
+        mr.append("ПУ")
+        ev.append("ПУ")
+    fin = open(file_path+fname, "r", encoding="utf-8")
+    strng = fin.readline()
+    while strng !="": #strng ="" <=> EOF is reached.
+        if len(strng) > 10:
+            spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
+            pret = datetime.date(int(str(spl[0].split('-')[0])),int(str(spl[0].split('-')[1])),int(str(spl[0].split('-')[2])))
+            for i in range(7):
+                if pret == dts[i]:
+                    mr[i] = spl[1]
+                    ev[i] = spl[2]
+        strng = fin.readline()
+    fin.close()
+    print("mr=",mr)
+    print("ev=",ev)
+    Draw_timetable(file_path, dts, mr, ev, weeknum) #draws jpeg with timetable on the week number = weeknum.   
+
+def whosslot(dt, mor, fname):
+    # returns name of slot owner. If nobody has taken, returns ПУ.
+    # mor = 0 <=> morning, mor =1 <=> evening.
+    # dt is date for sure.
+    res = "ПУ"
+    fin = open(fname, "r", encoding="utf-8")
+    strng = fin.readline()
+    while strng !="": #strng ="" <=> EOF is reached.
+        if len(strng) > 10:
+            spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
+            if datetime.date(int(str(spl[0].split('-')[0])),int(str(spl[0].split('-')[1])),int(str(spl[0].split('-')[2]))) == dt:
+                if mor == 0:
+                    res = spl[1]
+                if mor == 1:
+                    res = spl[2]
+        strng = fin.readline()
+    fin.close()
+    return res
+ 
 def get_stats(fname):
     fin = open(fname,"r", encoding="utf-8")
     stat = [[0,0,0,0],[0,0,0,0]]
@@ -100,10 +303,9 @@ def get_stats(fname):
     #stat[1] = [0,0,0,0] #number of evening doggy walks. СП, ММ, КА, КН.
     strng = fin.readline()
     while strng !="": #strng ="" <=> EOF is reached.
-        print(strng)
         if len(strng) > 10:
             spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
-            print(datetime.date(int(str(spl[0].split('-')[0])),int(str(spl[0].split('-')[1])),int(str(spl[0].split('-')[2]))))
+           # print(datetime.date(int(str(spl[0].split('-')[0])),int(str(spl[0].split('-')[1])),int(str(spl[0].split('-')[2]))))
             if datetime.date(int(str(spl[0].split('-')[0])),int(str(spl[0].split('-')[1])),int(str(spl[0].split('-')[2]))) <= td:
                 if spl[1] == 'СП':
                     stat[0][0] += 1
@@ -239,304 +441,235 @@ async def morning_pressed(callback: types.CallbackQuery, state: FSMContext):
     await state.update_data(tt = 0) # tt=0 <=> утро, 1 - вечер.
     user_data = await state.get_data()
     cdt = user_data['dt']
-    #print("tt=",user_data['tt'])
-    print(user_data['wdn'], user_data['wd'], user_data['week'])
-    #print(user_data['morn_week0'])
-    #print("проверяем ", user_data['morn_week0'][user_data['wdn']-1])
-    if (user_data['week'] == 0):
-        if user_data['tt'] == 0:
-            if user_data['morn_week0'][user_data['wdn']-1] == "ПУ":
-                 # the slot is empty.
-                print("w0, the slot is empty")
-                pict_path = user_data['pict_path'] +"eek"+str(user_data['week'])+".jpg"
-                new_img = Image.open(pict_path)
-                font = ImageFont.truetype("arial.ttf", 14)
-                pencil = ImageDraw.Draw(new_img)
-                wdn = int(user_data['wdn']) # weekday number from 1 to 7.
-                r = user_data['red']
-                g = user_data['green']
-                b = user_data['blue']
-                pencil.rectangle([40+(wdn-1)*32, 14+user_data['tt']*32, 65+(wdn-1)*32, 39+user_data['tt']*32],fill = (r, g, b, 0), outline = 'black', width = 1)
-                pencil.text((40+3+(wdn-1)*32, 18),user_data['sname'], font=font, fill='black')
-                new_img.save(pict_path)
-                await callback.message.answer("Отличный выбор, "+user_data['name']+"!", reply_markup=get_ref_keyboard())
-                await state.set_state(default_state)
-                await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
-                #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,0,user_data['sname'])
-                #Let's update the timetable loaded.
-                ev = user_data['morn_week0']
-                ev[user_data['wdn']-1] = user_data['sname']
-                await state.update_data(morn_week0 = ev)
-                await callback.answer()
-            else:
-                #print("smbd has already taken this timeslot")
-                if user_data['morn_week0'][user_data['wdn']-1] == user_data['sname'].upper():
-                    await state.set_state(play.choisedate)
-                    await callback.message.answer("Это время уже и так твоё, "+user_data['name']+". Возьмёшь ещё?", reply_markup=daykeyboard())
-                else:
-                    #Time to negotiate.
-                    await state.set_state(play.choisedate)
-                    await callback.message.answer("Это время успел занять "+user_data['morn_week0'][user_data['wdn']-1]+". Выберешь другое?", reply_markup=daykeyboard())
+    fpath = user_data['pict_path']
+    owner = whosslot(cdt,0,fpath+"utf8calendar.txt")
+    print(owner)
+    if owner == "ПУ":
+    # slot is empty.
+        await callback.message.answer("Отличный выбор, "+user_data['name']+"!", reply_markup=get_ref_keyboard())
+        await state.set_state(default_state)
+        #---Let's update file wcalendar.txt
+        put_into(user_data['pict_path']+"utf8calendar.txt",cdt,0,user_data['sname'])
+        #Let's update the timetable loaded if needed.
+        if whatweek(cdt)==0:
+            ev = user_data['morn_week0']
+            ev[cdt.weekday()] = user_data['sname']
+            await state.update_data(morn_week0 = ev)
+            Draw_timetableFF(fpath,"utf8calendar.txt",0)
+            await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(user_data['pict_path'] +"eek0.jpg"))
+        if whatweek(cdt)==1:
+            ev = user_data['morn_week1']
+            ev[cdt.weekday()] = user_data['sname']
+            Draw_timetableFF(fpath,"utf8calendar.txt",1)
+            await state.update_data(morn_week1 = ev)
+            await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(user_data['pict_path'] +"eek1.jpg"))
+    else:
+    #print("smbd has already taken this timeslot")
+        if owner == user_data['sname'].upper():
+            await state.set_state(play.choisedate)
+            await callback.message.answer("Это время уже и так твоё, "+user_data['name']+". Возьмёшь ещё?", reply_markup=daykeyboard())
         else:
-            if user_data['even_week0'][user_data['wdn']-1] == "ПУ":
-                # the slot is empty.
-                print("the slot is empty")
-                pict_path = user_data['pict_path'] +"eek"+str(user_data['week'])+".jpg"
-                new_img = Image.open(pict_path)
-                font = ImageFont.truetype("arial.ttf", 14)
-                pencil = ImageDraw.Draw(new_img)
-                wdn = int(user_data['wdn']) # weekday number from 1 to 7.
-                r = user_data['red']
-                g = user_data['green']
-                b = user_data['blue']
-                pencil.rectangle([40+(wdn-1)*32, 14+user_data['tt']*32, 65+(wdn-1)*32, 39+user_data['tt']*32],fill = (r, g, b, 0), outline = 'black', width = 1)
-                pencil.text((40+3+(wdn-1)*32, 18+user_data['tt']*32),user_data['sname'], font=font, fill='black')
-                new_img.save(pict_path)
-                await callback.message.answer("Отличный выбор, "+user_data['name']+"!", reply_markup=get_ref_keyboard())
-                await state.set_state(default_state)
-                await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
-                #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,1,user_data['sname'])
-                #Let's update the timetable loaded.
-                ev = user_data['even_week0']
-                ev[user_data['wdn']-1] = user_data['sname']
-                await state.update_data(even_week0 = ev)
-                await callback.answer()
-            else:
-                #print("smbd has already taken this timeslot")
-                if user_data['even_week0'][user_data['wdn']-1] == user_data['sname'].upper():
-                    await callback.message.answer("Это время уже и так твоё, "+user_data['name']+". Возьмёшь ещё?", reply_markup=daykeyboard())
-                    await callback.answer()
-                else:
-                    #Time to negotiate.
-                    await callback.message.answer("Это время успел занять "+user_data['even_week0'][user_data['wdn']-1]+". Выберешь другое?", reply_markup=daykeyboard())
-    if (user_data['week'] == 1):
-        if user_data['tt'] == 0:
-            if user_data['morn_week1'][user_data['wdn']-1] == "ПУ":
-                 # the slot is empty.
-                print("w1, the slot is empty")
-                pict_path = user_data['pict_path'] +"eek"+str(user_data['week'])+".jpg"
-                new_img = Image.open(pict_path)
-                font = ImageFont.truetype("arial.ttf", 14)
-                pencil = ImageDraw.Draw(new_img)
-                wdn = int(user_data['wdn']) # weekday number from 1 to 7.
-                r = user_data['red']
-                g = user_data['green']
-                b = user_data['blue']
-                pencil.rectangle([40+(wdn-1)*32, 14+user_data['tt']*32, 65+(wdn-1)*32, 39+user_data['tt']*32],fill = (r, g, b, 0), outline = 'black', width = 1)
-                pencil.text((40+3+(wdn-1)*32, 18),user_data['sname'], font=font, fill='black')
-                new_img.save(pict_path)
-                await callback.message.answer("Отличный выбор, "+user_data['name']+"!", reply_markup=get_ref_keyboard())
-                await state.set_state(default_state)
-                await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
-                #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,0,user_data['sname'])
-                #Let's update the timetable loaded.
-                ev = user_data['morn_week1']
-                ev[user_data['wdn']-1] = user_data['sname']
-                await state.update_data(morn_week1 = ev)
-                await callback.answer()
-            else:
-                #print("smbd has already taken this timeslot")
-                if user_data['morn_week1'][user_data['wdn']-1] == user_data['sname'].upper():
-                    await state.set_state(play.choisedate)
-                    await callback.message.answer("Это время уже и так твоё, "+user_data['name']+". Возьмёшь ещё?", reply_markup=daykeyboard())
-                else:
-                    #Time to negotiate.
-                    await state.set_state(play.choisedate)
-                    await callback.message.answer("Это время успел занять "+user_data['morn_week1'][user_data['wdn']-1]+". Выберешь другое?", reply_markup=daykeyboard())
-        else:
-            if user_data['even_week1'][user_data['wdn']-1] == "ПУ":
-                # the slot is empty.
-                print("the slot is empty")
-                pict_path = user_data['pict_path'] +"eek"+str(user_data['week'])+".jpg"
-                new_img = Image.open(pict_path)
-                font = ImageFont.truetype("arial.ttf", 14)
-                pencil = ImageDraw.Draw(new_img)
-                wdn = int(user_data['wdn']) # weekday number from 1 to 7.
-                r = user_data['red']
-                g = user_data['green']
-                b = user_data['blue']
-                pencil.rectangle([40+(wdn-1)*32, 14+user_data['tt']*32, 65+(wdn-1)*32, 39+user_data['tt']*32],fill = (r, g, b, 0), outline = 'black', width = 1)
-                pencil.text((40+3+(wdn-1)*32, 18+user_data['tt']*32),user_data['sname'], font=font, fill='black')
-                new_img.save(pict_path)
-                await callback.message.answer("Отличный выбор, "+user_data['name']+"!", reply_markup=get_ref_keyboard())
-                await state.set_state(default_state)
-                await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
-                #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,1,user_data['sname'])
-                #Let's update the timetable loaded.
-                ev = user_data['even_week1']
-                ev[user_data['wdn']-1] = user_data['sname']
-                await state.update_data(even_week1 = ev)
-                await callback.answer()
-            else:
-                #print("smbd has already taken this timeslot")
-                if user_data['even_week1'][user_data['wdn']-1] == user_data['sname'].upper():
-                    await callback.message.answer("Это время уже и так твоё, "+user_data['name']+". Возьмёшь ещё?", reply_markup=daykeyboard())
-                    await callback.answer()
-                else:
-                    #Time to negotiate.
-                    await callback.message.answer("Это время успел занять "+user_data['even_week1'][user_data['wdn']-1]+". Выберешь другое?", reply_markup=daykeyboard())  
-    await callback.answer() # чтобы подтвердить ответ, техническая штука
+            #Time to negotiate.
+            await state.set_state(play.choisedate)
+            answr = "Это время успел занять "+owner+". Выберешь другое?"
+            await callback.message.answer(answr, reply_markup=daykeyboard())
 
+    await callback.answer()
+
+    
 @dp.callback_query(F.data == "evening", StateFilter(play.choisetime))
-async def morning_pressed(callback: types.CallbackQuery, state: FSMContext):
+async def evening_pressed(callback: types.CallbackQuery, state: FSMContext):
     await state.update_data(tt = 1) # tt=0 <=> утро, 1 - вечер.
     user_data = await state.get_data()
     cdt = user_data['dt']
-    print("dt=",user_data['dt'])
-    #print(user_data['wdn'], user_data['wd'], user_data['week'])
-    #print(user_data['even_week0'])
-    #print("проверяем ", user_data['morn_week0'][user_data['wdn']-1])
-    if (user_data['week'] == 0):
-        if user_data['tt'] == 0:
-            if user_data['morn_week0'][user_data['wdn']-1] == "ПУ":
-                 # the slot is empty.
-                print("the slot is empty")
-                pict_path = user_data['pict_path'] +"eek"+str(user_data['week'])+".jpg"
-                new_img = Image.open(pict_path)
-                font = ImageFont.truetype("arial.ttf", 14)
-                pencil = ImageDraw.Draw(new_img)
-                wdn = int(user_data['wdn']) # weekday number from 1 to 7.
-                r = user_data['red']
-                g = user_data['green']
-                b = user_data['blue']
-                pencil.rectangle([40+(wdn-1)*32, 14+user_data['tt']*32, 65+(wdn-1)*32, 39+user_data['tt']*32],fill = (r, g, b, 0), outline = 'black', width = 1)
-                pencil.text((40+3+(wdn-1)*32, 18),user_data['sname'], font=font, fill='black')
-                new_img.save(pict_path)
-                await callback.message.answer("Отличный выбор, "+user_data['name']+"!", reply_markup=get_ref_keyboard())
-                await state.set_state(default_state)
-                await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
-                #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,0,user_data['sname'])
-                #Let's update the timetable loaded.
-                ev = user_data['morn_week0']
-                ev[user_data['wdn']-1] = user_data['sname']
-                await state.update_data(morn_week0 = ev)
-                await callback.answer()
-            else:
-                #print("smbd has already taken this timeslot")
-                if user_data['morn_week0'][user_data['wdn']-1] == user_data['sname'].upper():
-                    await callback.message.answer("Это время уже и так твоё, "+user_data['name']+". Возьмёшь ещё?", reply_markup=daykeyboard())
-                    await state.set_state(play.choisedate)
-                    await callback.answer()
-                else:
-                    #Time to negotiate.
-                    await state.set_state(play.choisedate)
-                    await callback.message.answer("Это время успел занять "+user_data['morn_week0'][user_data['wdn']-1]+". Выберешь другое?", reply_markup=daykeyboard())
-                    await callback.answer()
+    fpath = user_data['pict_path']
+    owner = whosslot(cdt,1,fpath+"utf8calendar.txt")
+    print(owner)
+    if owner == "ПУ":
+    # slot is empty.
+        await callback.message.answer("Отличный выбор, "+user_data['name']+"!", reply_markup=get_ref_keyboard())
+        await state.set_state(default_state)
+        #---Let's update file wcalendar.txt
+        put_into(user_data['pict_path']+"utf8calendar.txt",cdt,1,user_data['sname'])
+        #Let's update the timetable loaded if needed.
+        if whatweek(cdt)==0:
+            ev = user_data['even_week0']
+            ev[cdt.weekday()] = user_data['sname']
+            await state.update_data(even_week0 = ev)
+            Draw_timetableFF(fpath,"utf8calendar.txt",0)
+            await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(user_data['pict_path'] +"eek0.jpg"))
+        if whatweek(cdt)==1:
+            ev = user_data['even_week1']
+            ev[cdt.weekday()] = user_data['sname']
+            Draw_timetableFF(fpath,"utf8calendar.txt",1)
+            await state.update_data(even_week1 = ev)
+            await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(user_data['pict_path'] +"eek1.jpg"))
+    else:
+    #print("smbd has already taken this timeslot")
+        if owner == user_data['sname'].upper():
+            await state.set_state(play.choisedate)
+            await callback.message.answer("Это время уже и так твоё, "+user_data['name']+". Возьмёшь ещё?", reply_markup=daykeyboard())
         else:
-            if user_data['even_week0'][user_data['wdn']-1] == "ПУ":
-                # the slot is empty.
-                print("the slot is empty")
-                pict_path = user_data['pict_path'] +"eek"+str(user_data['week'])+".jpg"
-                new_img = Image.open(pict_path)
-                font = ImageFont.truetype("arial.ttf", 14)
-                pencil = ImageDraw.Draw(new_img)
-                wdn = int(user_data['wdn']) # weekday number from 1 to 7.
-                r = user_data['red']
-                g = user_data['green']
-                b = user_data['blue']
-                pencil.rectangle([40+(wdn-1)*32, 14+user_data['tt']*32, 65+(wdn-1)*32, 39+user_data['tt']*32],fill = (r, g, b, 0), outline = 'black', width = 1)
-                pencil.text((40+3+(wdn-1)*32, 18+user_data['tt']*32),user_data['sname'], font=font, fill='black')
-                new_img.save(pict_path)
-                await callback.message.answer("Отличный выбор, "+user_data['name']+"!", reply_markup=get_ref_keyboard())
-                #Let's update the timetable loaded.
-                ev = user_data['even_week0']
-                ev[user_data['wdn']-1] = user_data['sname']
-                await state.update_data(even_week0 = ev)
+            #Time to negotiate.
+            await state.set_state(play.choisedate)
+            answr = "Это время успел занять "+owner+". Выберешь другое?"
+            await callback.message.answer(answr, reply_markup=daykeyboard())
+    await callback.answer()
+    
+    # await state.update_data(tt = 1) # tt=0 <=> утро, 1 - вечер.
+    # user_data = await state.get_data()
+    # cdt = user_data['dt']
+    # print("dt=",user_data['dt'])
+    # #print(user_data['wdn'], user_data['wd'], user_data['week'])
+    # #print(user_data['even_week0'])
+    # #print("проверяем ", user_data['morn_week0'][user_data['wdn']-1])
+    # if (user_data['week'] == 0):
+    #     if user_data['tt'] == 0:
+    #         if user_data['morn_week0'][user_data['wdn']-1] == "ПУ":
+    #              # the slot is empty.
+    #             print("the slot is empty")
+    #             pict_path = user_data['pict_path'] +"eek"+str(user_data['week'])+".jpg"
+    #             new_img = Image.open(pict_path)
+    #             font = ImageFont.truetype("arial.ttf", 14)
+    #             pencil = ImageDraw.Draw(new_img)
+    #             wdn = int(user_data['wdn']) # weekday number from 1 to 7.
+    #             r = user_data['red']
+    #             g = user_data['green']
+    #             b = user_data['blue']
+    #             pencil.rectangle([40+(wdn-1)*32, 14+user_data['tt']*32, 65+(wdn-1)*32, 39+user_data['tt']*32],fill = (r, g, b, 0), outline = 'black', width = 1)
+    #             pencil.text((40+3+(wdn-1)*32, 18),user_data['sname'], font=font, fill='black')
+    #             new_img.save(pict_path)
+    #             await callback.message.answer("Отличный выбор, "+user_data['name']+"!", reply_markup=get_ref_keyboard())
+    #             await state.set_state(default_state)
+    #             await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
+    #             #---Let's update file wcalendar.txt
+    #             put_into(user_data['pict_path']+"utf8calendar.txt",cdt,0,user_data['sname'])
+    #             #Let's update the timetable loaded.
+    #             ev = user_data['morn_week0']
+    #             ev[user_data['wdn']-1] = user_data['sname']
+    #             await state.update_data(morn_week0 = ev)
+    #             await callback.answer()
+    #         else:
+    #             #print("smbd has already taken this timeslot")
+    #             if user_data['morn_week0'][user_data['wdn']-1] == user_data['sname'].upper():
+    #                 await callback.message.answer("Это время уже и так твоё, "+user_data['name']+". Возьмёшь ещё?", reply_markup=daykeyboard())
+    #                 await state.set_state(play.choisedate)
+    #                 await callback.answer()
+    #             else:
+    #                 #Time to negotiate.
+    #                 await state.set_state(play.choisedate)
+    #                 await callback.message.answer("Это время успел занять "+user_data['morn_week0'][user_data['wdn']-1]+". Выберешь другое?", reply_markup=daykeyboard())
+    #                 await callback.answer()
+    #     else:
+    #         if user_data['even_week0'][user_data['wdn']-1] == "ПУ":
+    #             # the slot is empty.
+    #             print("the slot is empty")
+    #             pict_path = user_data['pict_path'] +"eek"+str(user_data['week'])+".jpg"
+    #             new_img = Image.open(pict_path)
+    #             font = ImageFont.truetype("arial.ttf", 14)
+    #             pencil = ImageDraw.Draw(new_img)
+    #             wdn = int(user_data['wdn']) # weekday number from 1 to 7.
+    #             r = user_data['red']
+    #             g = user_data['green']
+    #             b = user_data['blue']
+    #             pencil.rectangle([40+(wdn-1)*32, 14+user_data['tt']*32, 65+(wdn-1)*32, 39+user_data['tt']*32],fill = (r, g, b, 0), outline = 'black', width = 1)
+    #             pencil.text((40+3+(wdn-1)*32, 18+user_data['tt']*32),user_data['sname'], font=font, fill='black')
+    #             new_img.save(pict_path)
+    #             await callback.message.answer("Отличный выбор, "+user_data['name']+"!", reply_markup=get_ref_keyboard())
+    #             #Let's update the timetable loaded.
+    #             ev = user_data['even_week0']
+    #             ev[user_data['wdn']-1] = user_data['sname']
+    #             await state.update_data(even_week0 = ev)
                 
-                await state.set_state(default_state)
-                await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))  #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,1,user_data['sname'])
-                await callback.answer() # чтобы подтвердить ответ, техническая штука
-            else:
-                #print("smbd has already taken this timeslot")
-                if user_data['even_week0'][user_data['wdn']-1] == user_data['sname'].upper():
-                    await callback.message.answer("Это время уже и так твоё, "+user_data['name']+". Возьмёшь ещё?", reply_markup=daykeyboard())
-                    await state.set_state(play.choisedate)
-                    await callback.answer() # чтобы подтвердить ответ, техническая штука
-                else:
-                    #Time to negotiate.
-                    await callback.message.answer("Это время успел занять "+user_data['even_week0'][user_data['wdn']-1]+". Выберешь другое?", reply_markup=daykeyboard())
-                    await state.set_state(play.choisedate)
-                    await callback.answer() # чтобы подтвердить ответ, техническая штука
-    if (user_data['week'] == 1):
-        if user_data['tt'] == 0:
-            if user_data['morn_week1'][user_data['wdn']-1] == "ПУ":
-                 # the slot is empty.
-                print("the slot is empty")
-                pict_path = user_data['pict_path'] +"eek"+str(user_data['week'])+".jpg"
-                new_img = Image.open(pict_path)
-                font = ImageFont.truetype("arial.ttf", 14)
-                pencil = ImageDraw.Draw(new_img)
-                wdn = int(user_data['wdn']) # weekday number from 1 to 7.
-                r = user_data['red']
-                g = user_data['green']
-                b = user_data['blue']
-                pencil.rectangle([40+(wdn-1)*32, 14+user_data['tt']*32, 65+(wdn-1)*32, 39+user_data['tt']*32],fill = (r, g, b, 0), outline = 'black', width = 1)
-                pencil.text((40+3+(wdn-1)*32, 18),user_data['sname'], font=font, fill='black')
-                new_img.save(pict_path)
-                await callback.message.answer("Отличный выбор, "+user_data['name']+"!", reply_markup=get_ref_keyboard())
-                await state.set_state(default_state)
-                await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
-                #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,0,user_data['sname'])
-                #Let's update the timetable loaded.
-                ev = user_data['morn_week1']
-                ev[user_data['wdn']-1] = user_data['sname']
-                await state.update_data(morn_week1 = ev)
-                await callback.answer()
-            else:
-                #print("smbd has already taken this timeslot")
-                if user_data['morn_week1'][user_data['wdn']-1] == user_data['sname'].upper():
-                    await callback.message.answer("Это время уже и так твоё, "+user_data['name']+". Возьмёшь ещё?", reply_markup=daykeyboard())
-                    await state.set_state(play.choisedate)
-                    await callback.answer()
-                else:
-                    #Time to negotiate.
-                    await state.set_state(play.choisedate)
-                    await callback.message.answer("Это время успел занять "+user_data['morn_week1'][user_data['wdn']-1]+". Выберешь другое?", reply_markup=daykeyboard())
-                    await callback.answer()
-        else:
-            if user_data['even_week1'][user_data['wdn']-1] == "ПУ":
-                # the slot is empty.
-                print("the slot is empty")
-                pict_path = user_data['pict_path'] +"eek"+str(user_data['week'])+".jpg"
-                new_img = Image.open(pict_path)
-                font = ImageFont.truetype("arial.ttf", 14)
-                pencil = ImageDraw.Draw(new_img)
-                wdn = int(user_data['wdn']) # weekday number from 1 to 7.
-                r = user_data['red']
-                g = user_data['green']
-                b = user_data['blue']
-                pencil.rectangle([40+(wdn-1)*32, 14+user_data['tt']*32, 65+(wdn-1)*32, 39+user_data['tt']*32],fill = (r, g, b, 0), outline = 'black', width = 1)
-                pencil.text((40+3+(wdn-1)*32, 18+user_data['tt']*32),user_data['sname'], font=font, fill='black')
-                new_img.save(pict_path)
-                await callback.message.answer("Отличный выбор, "+user_data['name']+"!", reply_markup=get_ref_keyboard())
-                #Let's update the timetable loaded.
-                ev = user_data['even_week1']
-                ev[user_data['wdn']-1] = user_data['sname']
-                await state.update_data(even_week1 = ev)
-                
-                await state.set_state(default_state)
-                await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))  #---Let's update file wcalendar.txt
-                put_into(user_data['pict_path']+"utf8calendar.txt",cdt,1,user_data['sname'])
-                await callback.answer() # чтобы подтвердить ответ, техническая штука
-            else:
-                #print("smbd has already taken this timeslot")
-                if user_data['even_week1'][user_data['wdn']-1] == user_data['sname'].upper():
-                    await callback.message.answer("Это время уже и так твоё, "+user_data['name']+". Возьмёшь ещё?", reply_markup=daykeyboard())
-                    await state.set_state(play.choisedate)
-                    await callback.answer() # чтобы подтвердить ответ, техническая штука
-                else:
-                    #Time to negotiate.
-                    await callback.message.answer("Это время успел занять "+user_data['even_week1'][user_data['wdn']-1]+". Выберешь другое?", reply_markup=daykeyboard())
-                    await state.set_state(play.choisedate)
-                    await callback.answer() # чтобы подтвердить ответ, техническая штука
-    await callback.answer() # чтобы подтвердить ответ, техническая штука
+    #             await state.set_state(default_state)
+    #             await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))  #---Let's update file wcalendar.txt
+    #             put_into(user_data['pict_path']+"utf8calendar.txt",cdt,1,user_data['sname'])
+    #             await callback.answer() # чтобы подтвердить ответ, техническая штука
+    #         else:
+    #             #print("smbd has already taken this timeslot")
+    #             if user_data['even_week0'][user_data['wdn']-1] == user_data['sname'].upper():
+    #                 await callback.message.answer("Это время уже и так твоё, "+user_data['name']+". Возьмёшь ещё?", reply_markup=daykeyboard())
+    #                 await state.set_state(play.choisedate)
+    #                 await callback.answer() # чтобы подтвердить ответ, техническая штука
+    #             else:
+    #                 #Time to negotiate.
+    #                 await callback.message.answer("Это время успел занять "+user_data['even_week0'][user_data['wdn']-1]+". Выберешь другое?", reply_markup=daykeyboard())
+    #                 await state.set_state(play.choisedate)
+    #                 await callback.answer() # чтобы подтвердить ответ, техническая штука
+    # if (user_data['week'] == 1):
+    #     if user_data['tt'] == 0:
+    #         if user_data['morn_week1'][user_data['wdn']-1] == "ПУ":
+    #              # the slot is empty.
+    #             print("the slot is empty")
+    #             pict_path = user_data['pict_path'] +"eek"+str(user_data['week'])+".jpg"
+    #             new_img = Image.open(pict_path)
+    #             font = ImageFont.truetype("arial.ttf", 14)
+    #             pencil = ImageDraw.Draw(new_img)
+    #             wdn = int(user_data['wdn']) # weekday number from 1 to 7.
+    #             r = user_data['red']
+    #             g = user_data['green']
+    #             b = user_data['blue']
+    #             pencil.rectangle([40+(wdn-1)*32, 14+user_data['tt']*32, 65+(wdn-1)*32, 39+user_data['tt']*32],fill = (r, g, b, 0), outline = 'black', width = 1)
+    #             pencil.text((40+3+(wdn-1)*32, 18),user_data['sname'], font=font, fill='black')
+    #             new_img.save(pict_path)
+    #             await callback.message.answer("Отличный выбор, "+user_data['name']+"!", reply_markup=get_ref_keyboard())
+    #             await state.set_state(default_state)
+    #             await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))
+    #             #---Let's update file wcalendar.txt
+    #             put_into(user_data['pict_path']+"utf8calendar.txt",cdt,0,user_data['sname'])
+    #             #Let's update the timetable loaded.
+    #             ev = user_data['morn_week1']
+    #             ev[user_data['wdn']-1] = user_data['sname']
+    #             await state.update_data(morn_week1 = ev)
+    #             await callback.answer()
+    #         else:
+    #             #print("smbd has already taken this timeslot")
+    #             if user_data['morn_week1'][user_data['wdn']-1] == user_data['sname'].upper():
+    #                 await callback.message.answer("Это время уже и так твоё, "+user_data['name']+". Возьмёшь ещё?", reply_markup=daykeyboard())
+    #                 await state.set_state(play.choisedate)
+    #                 await callback.answer()
+    #             else:
+    #                 #Time to negotiate.
+    #                 await state.set_state(play.choisedate)
+    #                 await callback.message.answer("Это время успел занять "+user_data['morn_week1'][user_data['wdn']-1]+". Выберешь другое?", reply_markup=daykeyboard())
+    #                 await callback.answer()
+    #     else:
+    #         if user_data['even_week1'][user_data['wdn']-1] == "ПУ":
+    #             # the slot is empty.
+    #             print("the slot is empty")
+    #             pict_path = user_data['pict_path'] +"eek"+str(user_data['week'])+".jpg"
+    #             new_img = Image.open(pict_path)
+    #             font = ImageFont.truetype("arial.ttf", 14)
+    #             pencil = ImageDraw.Draw(new_img)
+    #             wdn = int(user_data['wdn']) # weekday number from 1 to 7.
+    #             r = user_data['red']
+    #             g = user_data['green']
+    #             b = user_data['blue']
+    #             pencil.rectangle([40+(wdn-1)*32, 14+user_data['tt']*32, 65+(wdn-1)*32, 39+user_data['tt']*32],fill = (r, g, b, 0), outline = 'black', width = 1)
+    #             pencil.text((40+3+(wdn-1)*32, 18+user_data['tt']*32),user_data['sname'], font=font, fill='black')
+    #             new_img.save(pict_path)
+    #             await callback.message.answer("Отличный выбор, "+user_data['name']+"!", reply_markup=get_ref_keyboard())
+    #             #Let's update the timetable loaded.
+    #             ev = user_data['even_week1']
+    #             ev[user_data['wdn']-1] = user_data['sname']
+    #             await state.update_data(even_week1 = ev)      
+    #             await state.set_state(default_state)
+    #             await bot.send_photo(chat_id=user_data['cht_id'], photo=types.FSInputFile(pict_path))  #---Let's update file wcalendar.txt
+    #             put_into(user_data['pict_path']+"utf8calendar.txt",cdt,1,user_data['sname'])
+    #             await callback.answer() # чтобы подтвердить ответ, техническая штука
+    #         else:
+    #             #print("smbd has already taken this timeslot")
+    #             if user_data['even_week1'][user_data['wdn']-1] == user_data['sname'].upper():
+    #                 await callback.message.answer("Это время уже и так твоё, "+user_data['name']+". Возьмёшь ещё?", reply_markup=daykeyboard())
+    #                 await state.set_state(play.choisedate)
+    #                 await callback.answer() # чтобы подтвердить ответ, техническая штука
+    #             else:
+    #                 #Time to negotiate.
+    #                 await callback.message.answer("Это время успел занять "+user_data['even_week1'][user_data['wdn']-1]+". Выберешь другое?", reply_markup=daykeyboard())
+    #                 await state.set_state(play.choisedate)
+    #                 await callback.answer() # чтобы подтвердить ответ, техническая штука
+    # await callback.answer() # чтобы подтвердить ответ, техническая штука
+
 @dp.callback_query(F.data == "legend")
 async def morning_pressed(callback: types.CallbackQuery, state: FSMContext):
     user_data = await state.get_data()
@@ -599,9 +732,10 @@ async def send_warn(message: types.Message, state: FSMContext):
         #await bot.send_message(chat_id=cht_id, text="Я обновился!\nТеперь есть кнопка 'обновить' - можно нажимать её вместо команды 'start'. Пользуйстесь😊\nА ещё я буду уведомлять когда кто-нибудь освободит время прогулки.")
         #print("gg")
         #await bot.send_message(chat_id=cht_id, text="Я обновился!\nТеперь я могу попросить погулять с пёсом кого скажете! Пользуйтесь\nА ещё произошла масштабная миграция - я переехал в облако. Будет надёжнее и быстрее.\nА ещё появилась команда \help - описание основного функционала. Совершенству нет предела😊\nStay tuned!")
+        await bot.send_message(chat_id=cht_id, text="Я обновился!\nТеперь я понимаю не только дни недели, но и даты! Записаться погулять стало ещё удобнее😁\nА ещё я стал надёжнее и быстрее.\nStay tuned!")
     else:
         cht_id = user_data['cht_id'] # this is this chat.
-        await bot.send_message(chat_id=cht_id, text="Последняя обнова была такая⬇️ Все в курсе, не будем спамить.\nТеперь я могу попросить погулять с пёсом кого скажете! Пользуйтесь\nА ещё произошла масштабная миграция - я переехал в облако. Будет надёжнее и быстрее.\nА ещё появилась команда \help - описание основного функционала. Совершенству нет предела😊\nStay tuned!")
+        await bot.send_message(chat_id=cht_id, text="Последняя обнова была такая⬇️ Все в курсе, не будем спамить.\nЯ обновился!\nТеперь я понимаю не только дни недели, но и даты! Записаться погулять стало ещё удобнее😁\nА ещё я стал надёжнее и быстрее.\nStay tuned!")
     #print("send alerts")
 
 # Обработчик команды /start ----------------------------------------------------------------------------------------------------------------
@@ -820,7 +954,8 @@ async def echo_message(message: types.Message, state: FSMContext):
     #print(mr)
     #print(ev)
     #Let's draw the timetable of week0.
-    Draw_timetable(user_data['pict_path'], dts, mr, ev, 0)
+   # Draw_timetable(user_data['pict_path'], dts, mr, ev, 0)
+    Draw_timetableFF(user_data['pict_path'],"utf8calendar.txt",0)
     print("Going to refresh week1")
     # Let's fill the next week = week1.
     tmpdate = datetime.date(int(dts[6].split('-')[0]),int(dts[6].split('-')[1]),int(dts[6].split('-')[2]))
@@ -833,7 +968,7 @@ async def echo_message(message: types.Message, state: FSMContext):
     dts1.append(tmpdate)
     mr.append("ПУ")
     ev.append("ПУ")
-    print(dts1)
+    #print(dts1)
     for k in range(6):
         tmpdate = dts1[k] + datetime.timedelta(days = 1)
         dts1.append(tmpdate)
@@ -907,7 +1042,7 @@ async def echo_message(message: types.Message, state: FSMContext):
     user_data = await state.get_data()
     await state.set_state(play.choisedate)
     #print(await state.get_data())
-    await message.answer(f"Отлично, выбирай любой день!\nВведи день недели. Я понимаю такое:\nпн, вт, ср, чт, пт, сб, вс", reply_markup=daykeyboard())
+    await message.answer(f"Отлично, выбирай любой день!\nВведи день недели. Я понимаю дату в формате ДД.ММ.ГГ и такое: пн, вт, ср, чт, пт, сб, вс", reply_markup=daykeyboard())
     #await bot.send_photo(chat_id=message.chat.id, photo=types.FSInputFile("matrix_rus.jpg"))
 
 @dp.message(F.text =="🕵️‍♂️Попросить")
@@ -1752,8 +1887,8 @@ async def echo_message(message: types.Message, state: FSMContext):
         fl = False
         dn = False
         msg = user_data['wanted_person']+", тебя просят прогулять пса утром в субботу на этой неделе.\nНе откажись - запишись😀 "+user_data['wanted_person_uname']
-        #cht_id = 120443225 # this is my chat.
-        cht_id = user_data['famcht_id'] # this is our family chat.
+        cht_id = 120443225 # this is my chat.
+        #cht_id = user_data['famcht_id'] # this is our family chat.
         await bot.send_message(chat_id=cht_id, text=msg)
         await message.answer("Попросили!", reply_markup=get_ref_keyboard())
         await state.set_state(default_state)
@@ -1924,8 +2059,11 @@ async def echo_message(message: types.Message, state: FSMContext):
         await state.update_data(wd = message.text)
         cdt = td + datetime.timedelta(days = 7-twd) # choosen day is on the this week - it is sunday.
         await state.update_data(week = 0)
-    # ------------- dates -----------------
-    # not ready yet
+    # ------№№№№№№№------- dates ------№№№№№№№№№№№№№-----------
+    if isdate(message.text):
+        fl = True
+        cdt = getdate(message.text) 
+        #await state.update_data(week = 0)
     if fl:
         #await state.update_data(week = 0) # just in debugging purposes. delete afterwards.
         await state.update_data(dt = cdt)
