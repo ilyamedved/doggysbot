@@ -1,0 +1,6 @@
+git status - для справки
+git add . - это нужно для формирования пакета изменений на отправку. Всё, что поменялось.
+git commit -m "название коммита"
+git push   - отправить на github.
+
+psw = lenin1917 for doggysbot repository.
