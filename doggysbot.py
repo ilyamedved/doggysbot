@@ -28,6 +28,7 @@ class play(StatesGroup):
     mode = State()
 # Инициализируем хранилище (создаем экземпляр класса MemoryStorage)
 storage = MemoryStorage()
+
 def isdate(txt): # True <=> txt is date.
     str = txt.lower().strip()
     res = False
@@ -90,8 +91,26 @@ def isdate(txt): # True <=> txt is date.
             if m==2 and d==29 and (y % 4) == 0:
                 res = True
         else:
-            # it is not date anyhow
-            res = False
+            # Let's try YYYY.MM.DD format or any other separator.
+            day = str[8:10]
+            mon = str[5:7]
+            yr = str[:4]
+            if day.isdigit() and mon.isdigit() and yr.isdigit():
+                d = int(day)
+                m = int(mon)
+                y = int(yr)
+                res = False
+                if (m==1 or m==3 or m==5 or m==7 or m==8 or m==10 or m==12) and d>0 and d<32:
+                    res = True
+                if (m==4 or m==6 or m==9 or m==11) and d>0 and d<31:
+                    res = True
+                if m==2 and d>0 and d<29:         
+                    res = True
+                if m==2 and d==29 and (y % 4) == 0:
+                    res = True
+            else:
+                # it is not date anyhow
+                res = False
     return res
 def getdate(txt): # asuming txt is date, returns the date.
     str = txt.lower().strip()
@@ -160,8 +179,28 @@ def getdate(txt): # asuming txt is date, returns the date.
             if res:
                 dt = datetime.date(y,m,d)
         else:
-            # it is not date anyhow
-            res = False
+            # asuming YYYY.MM.DD format or any other separator.
+            day = str[8:10]
+            mon = str[5:7]
+            yr = str[:4]
+            if day.isdigit() and mon.isdigit() and yr.isdigit():
+                d = int(day)
+                m = int(mon)
+                y = int(yr)
+                res = False
+                if (m==1 or m==3 or m==5 or m==7 or m==8 or m==10 or m==12) and d>0 and d<32:
+                    res = True
+                if (m==4 or m==6 or m==9 or m==11) and d>0 and d<31:
+                    res = True
+                if m==2 and d>0 and d<29:         
+                    res = True
+                if m==2 and d==29 and (y % 4) == 0:
+                    res = True
+                if res:
+                    dt = datetime.date(y,m,d)
+            else:
+                # it is not date anyhow
+                res = False
         if not res:
             dt = datetime.date(1980,10,26)
     return dt
@@ -172,7 +211,6 @@ def whatweek(cdt):
     n = (cdt - md).days
     return n//7
  
-
 def Draw_timetable(file_path, dts, mr, ev, weeknum): #draws jpeg with timetable on the week number = weeknum.
     new_img = Image.open(file_path +"eek_matrix.jpg")
     font = ImageFont.truetype("arial.ttf", 14)
@@ -251,6 +289,7 @@ def Draw_timetable(file_path, dts, mr, ev, weeknum): #draws jpeg with timetable 
 
 def Draw_timetableFF(file_path, fname, weeknum): #draws jpeg with timetable on the week number = weeknum.
     # let's fill mr, ev and dts and then call the sub.
+    # 'FF' means 'from file'
     td = datetime.date.today()
     md = td - datetime.timedelta(days = td.weekday()) #md = date of the monday this week.
     md = md + datetime.timedelta(days = 7*weeknum) # md = date of the monday needed week.
@@ -264,7 +303,7 @@ def Draw_timetableFF(file_path, fname, weeknum): #draws jpeg with timetable on t
     fin = open(file_path+fname, "r", encoding="utf-8")
     strng = fin.readline()
     while strng !="": #strng ="" <=> EOF is reached.
-        if len(strng) > 10:
+        if len(strng) >= 10:
             spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
             pret = datetime.date(int(str(spl[0].split('-')[0])),int(str(spl[0].split('-')[1])),int(str(spl[0].split('-')[2])))
             for i in range(7):
@@ -303,7 +342,7 @@ def get_stats(fname):
     #stat[1] = [0,0,0,0] #number of evening doggy walks. СП, ММ, КА, КН.
     strng = fin.readline()
     while strng !="": #strng ="" <=> EOF is reached.
-        if len(strng) > 10:
+        if len(strng) >= 10:
             spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
            # print(datetime.date(int(str(spl[0].split('-')[0])),int(str(spl[0].split('-')[1])),int(str(spl[0].split('-')[2]))))
             if datetime.date(int(str(spl[0].split('-')[0])),int(str(spl[0].split('-')[1])),int(str(spl[0].split('-')[2]))) <= td:
@@ -766,33 +805,41 @@ async def cmd_start(message: types.Message, state: FSMContext):
      # Let's fill the calendar from the file. 
     #fname = user_data['pict_path']+"calendar.txt"
     fname = user_data['pict_path']+"utf8calendar.txt"
-    print(fname)
+    #print(fname)
     #fin = open(fname,"r", encoding="ANSI")
     fin = open(fname,"r", encoding="utf-8")
     for k in range(7):
         fl = True
         cdt = monday + datetime.timedelta(days = k) # current date to look for in the file.
-        print(cdt)
+        #print("cdt=",cdt)
         while fl:
             strng = fin.readline()
-            if strng != "":
-                spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
-                print(spl)
-                if datetime.date(int(spl[0].split('-')[0]),int(spl[0].split('-')[1]),int(spl[0].split('-')[2])) == cdt:   
-                    fl = False                
-            else:
+            if strng == "" :
                 fl = False #EOF is reached.
+            else:
+                spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
+                spl.append("y") # it is needed to skip epmtylines, to make sure spl has at least one element.
+                #print(spl[0], isdate(spl[0]))
+                if isdate(spl[0]):
+                    #if datetime.date(int(spl[0].split('-')[0]),int(spl[0].split('-')[1]),int(spl[0].split('-')[2])) == cdt:   
+                    #print(getdate(spl[0]), cdt)
+                    if getdate(spl[0]) == cdt:    
+                        fl = False
+                #else:
+                    #strange stroke, let's skip it.                
         if strng == "":
             # there is no searched date in the file :-(
+            #print(cdt, "не нашлась")
             dts.append(str(cdt.year)+"-"+str(cdt.month)+"-"+str(cdt.day))
             mr.append("ПУ")
             ev.append("ПУ")
-            print(dts)
+            #print(dts)
         else:
+            #print(cdt, "нашлась")
             dts.append(spl[0])
             mr.append(spl[1])
             ev.append(spl[2])
-            print(dts)
+           #print(dts)
         fin.seek(0) # rewind the file.
     fin.close()
     await state.update_data(dates_week0 = dts)
@@ -800,9 +847,9 @@ async def cmd_start(message: types.Message, state: FSMContext):
     await state.update_data(even_week0 = ev)
     
     print("week0 is done")
-    print(dts)
-    print(mr)
-    print(ev)
+    #print(dts)
+    #print(mr)
+    #print(ev)
     #Let's draw the timetable of week0.
     Draw_timetable(user_data['pict_path'], dts, mr, ev, 0)
     print("Going to fill week1")
@@ -817,7 +864,7 @@ async def cmd_start(message: types.Message, state: FSMContext):
     dts1.append(tmpdate)
     mr.append("ПУ")
     ev.append("ПУ")
-    print(dts1)
+    #print(dts1)
     for k in range(6):
         tmpdate = dts1[k] + datetime.timedelta(days = 1)
         dts1.append(tmpdate)
@@ -829,17 +876,19 @@ async def cmd_start(message: types.Message, state: FSMContext):
     while fl:
         #let's find dts[k] in the file.
         strng = fin.readline()
-        if strng != "":
-            spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
-            #print(spl[0].split('-')[0])
-            tmpdate = datetime.date(int(spl[0].split('-')[0]),int(spl[0].split('-')[1]),int(spl[0].split('-')[2]))
-            print(tmpdate)
-            for k in range(7):   
-                if dts1[k] == tmpdate:
-                    mr[k] = spl[1]
-                    ev[k] = spl[2]                
+        if strng == "" :
+                fl = False #EOF is reached.
         else:
-            fl = False #EOF is reached. dts[k] is not found.
+            spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
+            spl.append("y") # this is to make sure spl has at least one element.
+            if isdate(spl[0]):
+                tmpdate = getdate(spl[0])
+                # print(tmpdate)
+                for k in range(7):   
+                    if dts1[k] == tmpdate:
+                        mr[k] = spl[1]
+                        ev[k] = spl[2]                
+
     fin.close()
     dts = []
     for k in range(7):
@@ -855,7 +904,7 @@ async def cmd_start(message: types.Message, state: FSMContext):
     Draw_timetable(user_data['pict_path'], dts, mr, ev, 1)
 
     user_data = await state.get_data()
-    #print(uname)
+    print(uname)
     if message.from_user.id == 120443225:
         await state.update_data(sname = 'СП')
         await state.update_data(name = 'Илья')
@@ -926,19 +975,20 @@ async def echo_message(message: types.Message, state: FSMContext):
         print(cdt)
         while fl:
             strng = fin.readline()
-            if strng != "":
-                spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
-                print(spl)
-                if datetime.date(int(spl[0].split('-')[0]),int(spl[0].split('-')[1]),int(spl[0].split('-')[2])) == cdt:   
-                    fl = False                
-            else:
+            if strng == "":
                 fl = False #EOF is reached.
+            else:
+                spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
+                spl.append("t")
+                if isdate(spl[0]):
+                    if getdate(spl[0]) == cdt:   
+                        fl = False
         if strng == "":
             # there is no searched date in the file :-(
             dts.append(str(cdt.year)+"-"+str(cdt.month)+"-"+str(cdt.day))
             mr.append("ПУ")
             ev.append("ПУ")
-            print(dts)
+            #print(dts)
         else:
             dts.append(spl[0])
             mr.append(spl[1])
@@ -974,23 +1024,25 @@ async def echo_message(message: types.Message, state: FSMContext):
         dts1.append(tmpdate)
         mr.append("ПУ")
         ev.append("ПУ")
-    print(dts1)
+    #print(dts1)
     fin = open(fname,"r", encoding="utf-8")
     fl = True
     while fl:
         #let's find dts[k] in the file.
         strng = fin.readline()
-        if strng != "":
+        if strng == "":
+            fl = False #EOF is reached. dts[k] is not found.
+        else:
             spl = strng.split() # w[0] is date, w[1] is morning, w[2] is evening.
-            #print(spl[0].split('-')[0])
-            tmpdate = datetime.date(int(spl[0].split('-')[0]),int(spl[0].split('-')[1]),int(spl[0].split('-')[2]))
-            print(tmpdate)
+            spl.append("h") # to make spl comprise at least one element.
+            if isdate(spl[0]):
+                tmpdate = getdate(spl[0])
+                #tmpdate = datetime.date(int(spl[0].split('-')[0]),int(spl[0].split('-')[1]),int(spl[0].split('-')[2]))
+                #print(tmpdate)
             for k in range(7):   
                 if dts1[k] == tmpdate:
                     mr[k] = spl[1]
-                    ev[k] = spl[2]                
-        else:
-            fl = False #EOF is reached. dts[k] is not found.
+                    ev[k] = spl[2]
     fin.close()
     dts = []
     for k in range(7):
